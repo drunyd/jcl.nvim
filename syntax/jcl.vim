@@ -61,10 +61,10 @@ syn match jclCNumber +\<\d\+\>+ contained
 syn match jclDsn +\(\(\w\{1,8}\.\)\+\w\{1,8}\((\w\{1,8})\)\?\|\(&&\w\{1,8}\)\)+ contained
 syn match jclCDsn +\(\(\w\{1,8}\.\)\+\w\{1,8}\((\w\{1,8})\)\?\|\(&&\w\{1,8}\)\)+ contained
 
-syn region jclDblQuote  start=+"+ skip+[^"]+ end=+"+ contained
-syn region jclSnglQuote start=+'+ skip+[^']+ end=+'+ contained
-syn region jclCDblQuote start=+"+ skip+[^"]+ end=+"+ contained
-syn region jclCSnglQuote start=+'+ skip+[^']+ end=+'+ contained
+syn region jclDblQuote  start=+"+ skip=+[^"]+ end=+"+ contained
+syn region jclSnglQuote start=+'+ skip=+[^']+ end=+'+ contained
+syn region jclCDblQuote start=+"+ skip=+[^"]+ end=+"+ contained
+syn region jclCSnglQuote start=+'+ skip=+[^']+ end=+'+ contained
 
 syn cluster jclConditional contains=jclCMainCommand,jclCIF,jclCData,jclCKwd,jclCond,jclCDblQuote,jclCSnglQuote,jclCComment,jclCOperator,jclCDsn,jclCPgm,jclCNumber
 
