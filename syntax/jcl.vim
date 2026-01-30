@@ -1,197 +1,178 @@
 " syntax/jcl.vim
-" Vim syntax file
-" Language:  MVS JCL (jcl)
-" Maintainer:  Fiorenzo Zanotti
-" Last Change: 2002 Sep 22
-" Ported to Neovim plugin form (2026) with minor fixes.
+" Modernized Neovim syntax for IBM JCL
+" Original: Fiorenzo Zanotti (2002)
+" Rewritten & modernized: 2026
 
-" For version 5.x: Clear all syntax items
-" For version 6.x: Quit when a syntax file was already loaded
-if version < 600
-  syntax clear
-elseif exists("b:current_syntax")
+" Prevent double-loading
+if exists("b:current_syntax")
   finish
 endif
 
+" -----------------------------------------------------------
+" Core setup
+" -----------------------------------------------------------
 syn case ignore
 
-syn keyword jclKwd pgm proc class dsn[ame] msgclass space disp contained
-syn keyword jclKwd parm member cond msglevel order lrecl recfm unit contained
-syn keyword jclKwd sysout outlim blksize region dcb amp contained
-syn keyword jclKwd then shr old new mod catlg rlse delete pass keep contained
-syn keyword jclKwd cyl trk vol retain ser label recorg sysda contained
-syn keyword jclKwd dummy contained
+" ===========================================================
+" BASE KEYWORDS
+" ===========================================================
+syn keyword jclKwd pgm proc class dsn dsnname msgclass space disp parm member
+syn keyword jclKwd cond msglevel order lrecl recfm unit sysout outlim blksize
+syn keyword jclKwd region dcb then shr old new mod catlg rlse delete pass keep 
+syn keyword jclKwd cyl trk vol retain ser label recorg sysda dummy amp
 
-syn keyword jclCKwd pgm proc class dsn[ame] msgclass space disp contained
-syn keyword jclCKwd parm member cond msglevel order lrecl recfm unit contained
-syn keyword jclCKwd sysout outlim blksize region dcb amp contained
-syn keyword jclCKwd then shr old new mod catlg rlse delete pass keep contained
-syn keyword jclCKwd cyl trk vol retain ser label recorg sysda contained
-syn keyword jclCKwd dummy contained
+" Uppercase copy (conditional)
+syn keyword jclCKwd pgm proc class dsn dsnname msgclass space disp parm member
+syn keyword jclCKwd cond msglevel order lrecl recfm unit sysout outlim blksize
+syn keyword jclCKwd region dcb then shr old new mod catlg rlse delete pass keep 
+syn keyword jclCKwd cyl trk vol retain ser label recorg sysda dummy amp
 
-syn keyword jclPgm idcams iebcopy sort icegener adrdssu ftp rexec contained
-syn keyword jclPgm iebgener iefbr14 contained
-syn keyword jclCPgm idcams iebcopy sort icegener adrdssu ftp rexec contained
-syn keyword jclCPgm iebgener iefbr14 contained
+" Program names
+syn keyword jclPgm idcams iebcopy sort icegener adrdssu ftp rexec iebgener iefbr14
+syn keyword jclCPgm idcams iebcopy sort icegener adrdssu ftp rexec iebgener iefbr14
 
-"
-" Matches main command and special dd
-"
-syn match jclMainCommand +^//[^* ]*\s\+EXEC+hs=e-3 contained
-syn match jclMainCommand +^//[^* ]*\s\+DD+hs=e-1 contained
-syn match jclMainCommand +^//[^* ]*\s\+INCLUDE+hs=e-6 contained
-syn match jclMainCommand +^//[^* ]*\s\+JCLLIB+hs=e-5 contained
-syn match jclMainCommand +^//[^* ]*\s\+JOB+hs=e-2 contained
-syn match jclMainCommand +^//[^* ]*\s\+SET+hs=e-2 contained
+" ===========================================================
+" MAIN COMMANDS
+" ===========================================================
+syn match jclMainCommand /^\/\/[^* ]*\s\+EXEC/    contained
+syn match jclMainCommand /^\/\/[^* ]*\s\+DD/      contained
+syn match jclMainCommand /^\/\/[^* ]*\s\+INCLUDE/ contained
+syn match jclMainCommand /^\/\/[^* ]*\s\+JCLLIB/  contained
+syn match jclMainCommand /^\/\/[^* ]*\s\+JOB/     contained
+syn match jclMainCommand /^\/\/[^* ]*\s\+SET/     contained
 
-syn match jclCMainCommand +^//[^* ]*\s\+EXEC+hs=e-3 contained
-syn match jclCMainCommand +^//[^* ]*\s\+DD+hs=e-1 contained
-syn match jclCMainCommand +^//[^* ]*\s\+INCLUDE+hs=e-6 contained
-syn match jclCMainCommand +^//[^* ]*\s\+JCLLIB+hs=e-5 contained
-syn match jclCMainCommand +^//[^* ]*\s\+JOB+hs=e-2 contained
-syn match jclCMainCommand +^//[^* ]*\s\+SET+hs=e-2 contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+EXEC/    contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+DD/      contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+INCLUDE/ contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+JCLLIB/  contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+JOB/     contained
+syn match jclCMainCommand /^\/\/[^* ]*\s\+SET/     contained
 
-syn match jclCond +^//[^* ]*\s\+ELSE+ contained
-syn match jclOperator "[()]" contained
-syn match jclCOperator +[()]+ contained
+" ===========================================================
+" BASIC MATCHES
+" ===========================================================
+syn match jclCond      /^\/\/[^* ]*\s\+ELSE/    contained
+syn match jclOperator  /[()]/                   contained
+syn match jclCOperator /[()]/                   contained
 
-syn match jclNumber +\<\d\+\>+ contained
-syn match jclCNumber +\<\d\+\>+ contained
+syn match jclNumber /\<\d\+\>/      contained
+syn match jclCNumber /\<\d\+\>/     contained
 
-syn match jclDsn +\(\(\w\{1,8}\.\)\+\w\{1,8}\((\w\{1,8})\)\?\|\(&&\w\{1,8}\)\)+ contained
-syn match jclCDsn +\(\(\w\{1,8}\.\)\+\w\{1,8}\((\w\{1,8})\)\?\|\(&&\w\{1,8}\)\)+ contained
+" Dataset naming (HLQ.HLQ.NAME, &VAR, &&TEMP)
+syn match jclDsn   /\(\(\w\{1,8}\.\)\+\w\{1,8}\(\(\w\{1,8}\)\)\?\|\(&&\w\{1,8}\)\)/ contained
+syn match jclCDsn  /\(\(\w\{1,8}\.\)\+\w\{1,8}\(\(\w\{1,8}\)\)\?\|\(&&\w\{1,8}\)\)/ contained
 
+" Quoted strings
 syn region jclDblQuote  start=+"+ skip=+[^"]+ end=+"+ contained
 syn region jclSnglQuote start=+'+ skip=+[^']+ end=+'+ contained
 syn region jclCDblQuote start=+"+ skip=+[^"]+ end=+"+ contained
 syn region jclCSnglQuote start=+'+ skip=+[^']+ end=+'+ contained
 
+" ===========================================================
+" IF / ENDIF REGIONS
+" ===========================================================
 syn cluster jclConditional contains=jclCMainCommand,jclCIF,jclCData,jclCKwd,jclCond,jclCDblQuote,jclCSnglQuote,jclCComment,jclCOperator,jclCDsn,jclCPgm,jclCNumber
 
 syn region jclIF  matchgroup=jclCond start=+^//\w*\s\+IF+ end=+^//\w*\s\+ENDIF+ contains=@jclConditional contained
 syn region jclCIF matchgroup=jclCond start=+^//\w*\s\+IF+ end=+^//\w*\s\+ENDIF+ contains=@jclConditional contained
 
-syn match jclCComment +^//\*.*$+ contained
+syn match jclCComment /^\/\/\*.*$/ contained
 
-" NOTE: fixed 'jclIf' → 'jclIF' below
+" ===========================================================
+" NON-CONDITIONAL CLUSTER
+" ===========================================================
 syn cluster jclNonConditional contains=jclMainCommand,jclKwd,jclIF,jclOperator,jclDblQuote,jclSnglQuote,jclDsn,jclPgm,jclNumber
 
-" High level matches
-syn match jclComment   +^//\*.*$+
-" syn match jclData    +^[^/].*$+
-syn match jclData      +^\([^/]\|/[^*/]\).*$+
-syn match jclStatement +^//[^*].*$+ transparent contains=@jclNonConditional
-syn match jclCData     +^\([^/]\|/[^*/]\).*$+ contained
+" ===========================================================
+" TOP LEVEL MATCHES
+" ===========================================================
+syn match jclComment   /^\/\/\*.*/
+syn match jclData      /^\([^/]\|\/[^*/]\).*/
+syn match jclStatement /^\/\/[^*].*/ transparent contains=@jclNonConditional
+syn match jclCData     /^\([^/]\|\/[^*/]\).*/ contained
 
-" --- Modern JCL Enhancements ---
+" ===========================================================
+" MODERN ENHANCEMENTS
+" ===========================================================
 
-" JES message codes
+" JES / system message codes
 syn match jclMsgCode /\<[A-Z][A-Z0-9]\{3,6}[A-Z]\{0,2}\d\{0,4}\>/
-hi def link jclMsgCode Identifier
 
 " DD names
 syn match jclDDName /^\/\/\zs[A-Z0-9$#@]\{1,8}\ze\s\+/
-hi def link jclDDName Type
 
 " Delimiters
 syn match jclComma /,/
 syn match jclParen /[()]/
-hi def link jclComma Delimiter
-hi def link jclParen Delimiter
 
-" Additional parameters
+" Parameters
 syn keyword jclParam TYPRUN NOTIFY RESTART TIME REGION ACCT MERGE LIKE STORCLAS MGMTCLAS DATACLAS COND PARM
-hi def link jclParam Statement
 
 " Dataset attributes
 syn keyword jclAttr DSORG RECFM BLKSIZE LRECL KEYLEN BUFNO
-hi def link jclAttr Identifier
 
 " Hex literals
 syn match jclHex /\<[0-9A-F]\{2,8}\>/
-hi def link jclHex Number
 
 " Character literals
 syn match jclCharLit /'[^']*'/
-hi def link jclCharLit String
 
 " PROC names
 syn match jclProcName /^\/\/[A-Z0-9$#@]\{1,8}\s\+PROC/
-hi def link jclProcName Function
 
-" Symbolics (&HLQ etc.)
+" Symbolic variables
 syn match jclSymbolic /&[A-Z0-9._$#@]\+/
-hi def link jclSymbolic PreProc
 
-" Return codes (STEP.RC)
+" Return codes
 syn match jclReturnCode /\<[A-Z0-9$#@]\{1,8}\.RC\>/
 syn keyword jclReturnCode LASTCC MAXCC
-hi def link jclReturnCode Number
 
 " AMP keyword
 syn keyword jclAmp AMP
-hi def link jclAmp Keyword
 
-" Define the default highlighting.
-" For version 5.7 and earlier: only when not done already
-" For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_jcl_syntax_inits")
-  if version < 508
-    let did_jcl_syntax_inits = 1
-    command -nargs=+ HiLink hi link <args>
-  else
-    command -nargs=+ HiLink hi def link <args>
-  endif
+" ===========================================================
+" ADD MODERN GROUPS INTO CLUSTERS
+" ===========================================================
+syn cluster jclNonConditional add=jclMsgCode,jclDDName,jclComma,jclParen,jclParam,jclAttr,jclHex,jclCharLit,jclProcName,jclSymbolic,jclReturnCode,jclAmp
+syn cluster jclConditional    add=jclMsgCode,jclDDName,jclComma,jclParen,jclParam,jclAttr,jclHex,jclCharLit,jclProcName,jclSymbolic,jclReturnCode,jclAmp
 
-  " Example GUI highlights from original (commented out)
-  " hi Comment guifg=darkgrey
-  " hi jclIF guibg=white
-  " hi jclCond guibg=grey guifg=darkblue gui=bold
-  " hi jclCComm guibg=white guifg=darkred
-  " hi jclCComment guibg=white guifg=darkgrey
-  " hi jclKwd guifg=brown
-  " hi jclCKwd guibg=white guifg=brown
-  " hi jclMainCommand guifg=blue
-  " hi jclCMainCommand guifg=blue guibg=grey
-  " hi jclData guifg=violet
-  " hi jclCData guifg=violet guibg=white
-  " hi jclOperator guifg=darkred
-  " hi jclCOperator guifg=darkred guibg=white
-  " hi jclDsn guifg=darkcyan
-  " hi jclCDsn guifg=darkcyan guibg=white
-
-  " Standard color links:
-  HiLink jclIF          Normal
-  HiLink jclCIF         Normal
-  HiLink jclCond        WarningMsg
-  HiLink jclCComm       Statement
-  HiLink jclCComment    Comment
-  HiLink jclKwd         Statement
-  HiLink jclCKwd        Statement
-  HiLink jclMainCommand Type
-  HiLink jclCMainCommand WarningMsg
-  HiLink jclOperator    Operator
-  HiLink jclCOperator   Operator
-  HiLink jclDsn         Normal
-  HiLink jclCDsn        Normal
-  HiLink jclData        Special
-  HiLink jclCData       Special
-  HiLink jclPgm         Function
-  HiLink jclCPgm        Function
-  HiLink jclNumber      Number
-  HiLink jclCNumber     Number
-  HiLink jclDblQuote    jclSnglQuote
-  HiLink jclSnglQuote   String
-  HiLink jclCDblQuote   jclCSnglQuote
-  HiLink jclCSnglQuote  String
-  HiLink jclCIF         jclIF
-  HiLink jclComment     Comment
-  HiLink jclCComment    Comment
-  HiLink jclComm        Statement
-  HiLink jclLabel       Label
-
-  syn sync fromstart    " synchronize from start
-  delcommand HiLink
-endif
+" ===========================================================
+" DEFAULT HIGHLIGHT LINKS
+" ===========================================================
+hi def link jclIF          Normal
+hi def link jclCIF         Normal
+hi def link jclCond        WarningMsg
+hi def link jclCComment    Comment
+hi def link jclKwd         Statement
+hi def link jclCKwd        Statement
+hi def link jclMainCommand Type
+hi def link jclCMainCommand WarningMsg
+hi def link jclOperator    Operator
+hi def link jclCOperator   Operator
+hi def link jclDsn         Identifier
+hi def link jclCDsn        Identifier
+hi def link jclData        Special
+hi def link jclCData       Special
+hi def link jclPgm         Function
+hi def link jclCPgm        Function
+hi def link jclNumber      Number
+hi def link jclCNumber     Number
+hi def link jclSnglQuote   String
+hi def link jclDblQuote    jclSnglQuote
+hi def link jclCSnglQuote  String
+hi def link jclCDblQuote   jclCSnglQuote
+hi def link jclComment     Comment
+hi def link jclMsgCode     Identifier
+hi def link jclDDName      Type
+hi def link jclComma       Delimiter
+hi def link jclParen       Delimiter
+hi def link jclParam       Statement
+hi def link jclAttr        Identifier
+hi def link jclHex         Number
+hi def link jclCharLit     String
+hi def link jclProcName    Function
+hi def link jclSymbolic    PreProc
+hi def link jclReturnCode  Number
+hi def link jclAmp         Keyword
 
 let b:current_syntax = "jcl"
