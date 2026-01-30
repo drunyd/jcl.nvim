@@ -83,6 +83,55 @@ syn match jclData      +^\([^/]\|/[^*/]\).*$+
 syn match jclStatement +^//[^*].*$+ transparent contains=@jclNonConditional
 syn match jclCData     +^\([^/]\|/[^*/]\).*$+ contained
 
+" --- Modern JCL Enhancements ---
+
+" JES message codes
+syn match jclMsgCode /\<[A-Z][A-Z0-9]\{3,6}[A-Z]\{0,2}\d\{0,4}\>/
+hi def link jclMsgCode Identifier
+
+" DD names
+syn match jclDDName /^\/\/\zs[A-Z0-9$#@]\{1,8}\ze\s\+/
+hi def link jclDDName Type
+
+" Delimiters
+syn match jclComma /,/
+syn match jclParen /[()]/
+hi def link jclComma Delimiter
+hi def link jclParen Delimiter
+
+" Additional parameters
+syn keyword jclParam TYPRUN NOTIFY RESTART TIME REGION ACCT MERGE LIKE STORCLAS MGMTCLAS DATACLAS COND PARM
+hi def link jclParam Statement
+
+" Dataset attributes
+syn keyword jclAttr DSORG RECFM BLKSIZE LRECL KEYLEN BUFNO
+hi def link jclAttr Identifier
+
+" Hex literals
+syn match jclHex /\<[0-9A-F]\{2,8}\>/
+hi def link jclHex Number
+
+" Character literals
+syn match jclCharLit /'[^']*'/
+hi def link jclCharLit String
+
+" PROC names
+syn match jclProcName /^\/\/[A-Z0-9$#@]\{1,8}\s\+PROC/
+hi def link jclProcName Function
+
+" Symbolics (&HLQ etc.)
+syn match jclSymbolic /&[A-Z0-9._$#@]\+/
+hi def link jclSymbolic PreProc
+
+" Return codes (STEP.RC)
+syn match jclReturnCode /\<[A-Z0-9$#@]\{1,8}\.RC\>/
+syn keyword jclReturnCode LASTCC MAXCC
+hi def link jclReturnCode Number
+
+" AMP keyword
+syn keyword jclAmp AMP
+hi def link jclAmp Keyword
+
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
