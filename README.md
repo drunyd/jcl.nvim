@@ -12,7 +12,7 @@ Neovim syntax highlighting for IBM MVS JCL files.
 -- lua/plugins/jcl.lua (example)
 return {
   {
-    "YOUR_GITHUB_USERNAME/jcl.nvim",
+    "drunyd/jcl.nvim",
     -- Smallest/simplest: just load on startup so ftdetect is available.
     lazy = false,
 
